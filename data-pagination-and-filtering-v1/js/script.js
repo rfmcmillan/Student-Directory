@@ -112,22 +112,24 @@ function addPagination (list) {
    // give className of 'active'
    firstButton.className = 'active';
    // create eventListener to listen for clicks on any of the pagination buttons
-   paginationList.addEventListener('click', (e) => {
-      // if click target is a pagination button
-      if (e.target.tagName = 'button') {
-         // for loop that loops through all the buttons 
-         for (let i = 0; i < paginationList.children.length; i++) {
+   
+   // for loop that adds event listener to each pagination button
+   for (let i = 0; i < paginationList.children.length; i++) {
+      let currButton = paginationList.children[i].firstElementChild;
+      currButton.addEventListener('click', (e) => {
+         for (let j = 0; j < paginationList.children.length; j++) {
             // removes 'acive' className from all buttons
-            paginationList.children[i].firstElementChild.className = ''
-         // end for
-         }
+            paginationList.children[j].firstElementChild.className = ''
+            // end for
+            }
          // add 'active' class to click target
          e.target.className = 'active';
          // to show the selected page, call the showPage function passing 'data' as the list argument and the button's corresponding page number as the page argument
          showPage(data,e.target.textContent)
-      // end if
-      }
-   });
+      // end event listener
+      });
+   // end for
+   }
 }
 
 // Call functions for the initial page load. These load the students and the page buttons. 
