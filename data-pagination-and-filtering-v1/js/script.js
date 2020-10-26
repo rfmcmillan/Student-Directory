@@ -132,6 +132,137 @@ function addPagination (list) {
    }
 }
 
+// Create addSearch function to add the search input to the page
+function addSearch () {
+   // create variable to hold header
+   const header = document.querySelector('header');
+   // function adds a label to the header in the html file after the 'Student' h2   
+   const searchLabel = document.createElement('label');
+   
+   header.appendChild(searchLabel);
+   // give it a 'for' of 'search'
+   searchLabel.htmlFor = 'search';
+   // give it a className of 'student-search'
+   searchLabel.className = 'student-search';
+   // inside the label, append an input for the search
+   const searchInput = document.createElement('input');
+   searchInput.type = 'text';
+   searchInput.id = 'search';
+   searchInput.placeholder = 'Search by name...';
+   searchLabel.appendChild(searchInput);
+   // also inside the label, append a button
+   const searchButton = document.createElement('button');
+   searchButton.type = 'button';
+   searchButton.id = 'submit';
+   searchButton.innerHTML = '<img src="img/icn-search.svg" alt="Search icon"></img>';
+   searchLabel.appendChild(searchButton);
+};
+
+
+
 // Call functions for the initial page load. These load the students and the page buttons. 
 showPage(data, 1)
 addPagination(data);
+addSearch();
+
+// add functionality to the search input
+
+
+
+// create function to perform search - two parameters: searchInput and names
+function searchFunc (searchTerm) {
+   // first construct a 'temporary page' with the html to  show all of the student list items
+   tempPage(data);
+   // then check if the h3s of any of the students matches the search term. (use a for loop here similar to warmup exercise)
+   // create a full list of names from the objects in the data.js file
+   let names = document.querySelectorAll('h3');
+   
+   for (let i = 0; i < names.length; i++) {
+      // check to see if the search term's length doesn't equal zero and if it is included in one of the namesList array's items
+      if (searchTerm.value.length !== 0 && names[i].textContent.toLowerCase().includes(searchTerm.value.toLowerCase())) {
+         names[i].parentNode.parentNode.style.display = 'block';
+      } else {
+         names[i].parentNode.parentNode.style.display = 'none'
+      }
+      // if it passes those two tests, you must construct a new Page with the results of the search
+      // if it does match the search term then add className of 'match' to the current list item
+      // end for
+   }
+}
+
+// this is the helper function to create a temporary page with all names that is searchable
+function tempPage (list) {
+   let studentList = document.querySelector('.student-list');
+   studentList.innerHTML = '';
+   for (let i = 0; i < list.length; i++) {
+      let currStudent = list[i]; 
+      insertStudent(currStudent);
+      }
+   // end for
+   // Create the insertStudent helper function that will be included in the showPage function.
+   function insertStudent (student) {
+   // create li and give a className of "student-item cf"
+      const studentLI = document.createElement('li');
+      studentLI.className = 'student-item cf';
+   // append the li in the ul in the html file
+      studentList.appendChild(studentLI);
+   // create div and give a className of "student-details"
+      const studentDetails = document.createElement('div');
+      studentDetails.className = 'student-details';
+   // append the div in the li
+      studentLI.appendChild(studentDetails);
+   // create an img and give className of "avatar", give it a src and alt as well
+      const studentImage = document.createElement('img');
+      studentImage.className = 'avatar';
+      studentImage.src = student.picture.medium
+      studentImage.alt = 'Picture of Student'
+   // append img in the div
+      studentDetails.appendChild(studentImage);
+   // create h3 and change text content to be a student name
+      const studentName = document.createElement('h3');
+      studentName.textContent = `${student.name.title} ${student.name.first} ${student.name.last}`
+   // append to the div
+      studentDetails.appendChild(studentName); 
+   // create a span and set text content to student's email address 
+      const studentEmail = document.createElement('span');
+      studentEmail.textContent = student.email;
+   // append the span to the div
+      studentDetails.appendChild(studentEmail);
+
+   // create another div to contain the 'joined' info
+      const joinedDate = document.createElement('div'); 
+   // give div a class of "joined-details"
+      joinedDate.className = 'joined-details';
+   // append the div in the li
+      studentLI.appendChild(joinedDate);
+   // create span
+      const joinedSpan = document.createElement('span');
+   // give span a class of "date"
+      joinedSpan.className = 'date';
+   // change span's textContent to the student's join date
+      joinedSpan.textContent = student.registered.date;
+   // append span in div
+      joinedDate.appendChild(joinedSpan);
+   }
+}
+   
+   // create variable to use in the event listeners 
+   // variable to hold the search input field
+   const search = document.querySelector('#search');
+   // variable to hold the search button
+   const submit = document.querySelector('#submit');
+   
+
+   
+   // call the search function in the callbacks of the event listeners below; pass in searchTerm and names as the arguments
+   submit.addEventListener('click', (e) => {
+      e.preventDefault();
+      searchFunc(search);
+      console.log('Search function works!');
+   });
+
+   search.addEventListener('keyup', (e) => {
+      // e.preventDefault();
+      searchFunc(search);
+      console.log('Keyup event on the Search input is functional!')
+   });
