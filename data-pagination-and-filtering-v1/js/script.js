@@ -7,6 +7,13 @@ FSJS Project 2 - Data Pagination and Filtering
 Create the `showPage` function
 This function will create and insert/append the elements needed to display a "page" of nine students
 */
+
+// create a span to hold the 'No Results' message. This message will have it's text content changed depending on whether there are results or not.
+const wholePage = document.querySelector('.page');
+   let noResultsMsg = document.createElement('span');
+   noResultsMsg.className = 'no-results';
+   wholePage.appendChild(noResultsMsg);
+
 // give two parameters to the function: list (from data.js file) and page 
 function showPage (list, page) {
    const itemsPerPage = 9;
@@ -170,19 +177,21 @@ function searchFunc (searchTerm, list) {
          // if it passes those tests, push the object to the new array
          newNamesArray.push(list[i]);
       // end if
-      } 
+      } else if (searchTerm.value.length === 0) {
+         newNamesArray = data;
+      }
+  
    // end for
    }
    // call showPage and addPaginationFunctions with the new array as the list argument
    showPage(newNamesArray, 1)
    addPagination(newNamesArray);
 
+   // if there are no search results, change the text content of the NoResultMsg to equal 'No results found'.
    if (newNamesArray.length === 0) {
-      const emptyPage = document.querySelector('.page');
-      const noResultsMsg = document.createElement('span');
       noResultsMsg.textContent = 'No results found';
-      noResultsMsg.className = 'no-results';
-      emptyPage.appendChild(noResultsMsg);
+   } else {
+      noResultsMsg.textContent = ''
    }
 }
 
