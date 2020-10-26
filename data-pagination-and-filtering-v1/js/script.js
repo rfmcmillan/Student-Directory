@@ -176,6 +176,14 @@ function searchFunc (searchTerm, list) {
    // call showPage and addPaginationFunctions with the new array as the list argument
    showPage(newNamesArray, 1)
    addPagination(newNamesArray);
+
+   if (newNamesArray.length === 0) {
+      const emptyPage = document.querySelector('.page');
+      const noResultsMsg = document.createElement('span');
+      noResultsMsg.textContent = 'No results found';
+      noResultsMsg.className = 'no-results';
+      emptyPage.appendChild(noResultsMsg);
+   }
 }
 
 // Call functions for the initial page load. These load the students, the page buttons and the search bar. 
